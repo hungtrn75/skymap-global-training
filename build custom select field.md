@@ -1,5 +1,5 @@
 ### Xây dựng một widget custom lại một `FormBuilderField` của [flutter_form_builder](https://pub.dev/packages/flutter_form_builder)
-> Khi muốn tạo thêm một custom BuilderField thì cần kế thừa lại lơp `FormBuilderField` để có override lại phương thức `builder` và custom `state` của BuilderField
+> Khi muốn tạo thêm một custom BuilderField thì cần kế thừa lại lớp `FormBuilderField` để có override lại phương thức `builder` và custom `state` của BuilderField
 
 - VD ở dưới là mã nguồn của `FormBuilderTextField` được cung cấp sẵn ở package. Nó cũng được kế thừa từ lớp `FormBuilderField` và giá trị của nó quản lý sẽ kiểu dữ liệu là `<String>`
 ```
@@ -23,6 +23,10 @@ class SelectOption with _$SelectOption {
 }
 ```
 - Lớp `SelectOption` sẽ bao gồm thông tin là định danh và tên của lựa chọn. Vì đây là một trường có thể chọn nhiều lựa chọn nên cần thêm thuộc tính `selected` để khi người dùng đã lựa chọn se được highlight lên trên giao diện
+
+<img src="assets/11.png" alt="11" width="400"/>
+
+
 - Từ đấy ta có kiểu dữ liệu của `FormBuilderOptionPickerField` là `List<SelectOption>`
 ```
 class FormBuilderOptionPickerField

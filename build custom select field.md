@@ -52,6 +52,10 @@ FormBuilderOptionPickerField({
 
 2. bool `allowMultiple`: Mặc định là `false`. Nghĩa là mặc định chỉ được chọn một lựa chọn và ngược lại có thể chọn nhiều hay không
 
+VD: Giao diện khi lựa chọn nhiều
+
+<img src="assets/11.png" alt="11" width="400"/>
+
 3. List<SelectOption> `ignoreOptions`: Bài toán hiện tại là nếu có 2 trường chọn và sau khi trường 1 được chọn thì trường 2 không được chọn những giá trị của trường 1 đã chọn thì thuộc tính này giúp cho mình lọc phần data tránh ra các lựa chọn này
 
 4. PickerType `pickerType`: Đây là `enum` để xác định cần lấy dữ liệu từ các nguồn nào và từ đó xác định được các `datasource` nên lấy từ đâu
@@ -99,7 +103,11 @@ builder: (FormFieldState<List<SelectOption>?> field) {
 ```
 1. Giao diện hiển tại vẫn chỉ là `custom` từ một `InputDecorator` và tương tự có thể thay đổi thông qua `InputDecoration` tương tự như các `fields` khác đã được dững sắn như là `FormBuilderCheckbox`, `FormBuilderTextField`, `FormBuilderDateRangePicker`,... Mục đích của điều này là để giao diện giữa các `field` được đồng đều và thống nhau theo cùng một kiểu. Tùy `mục đích` mà ta có thể thay đổi khác
 
-2. Tương tự như một `StatefulWidget` thì `FormBuilderField` hỗ trợ ta xây dựng một `state` đi kèm với `field` muốn `custom` này. `state` này sẽ được khởi tạo thông qua ghi thực thi cho phương thức `createState`
+2. Ở đây đặc biệt phải ghi nhớ cần truyền thuộc tính `field.errorText` vào `decoration` vì nó là thuộc tính thông báo lỗi khi `validate` dữ liệu.
+
+<img src="assets/13.png" alt="13" width="400"/>
+
+3. Tương tự như một `StatefulWidget` thì `FormBuilderField` hỗ trợ ta xây dựng một `state` đi kèm với `field` muốn `custom` này. `state` này sẽ được khởi tạo thông qua ghi thực thi cho phương thức `createState`
 ```
 @override
 _FormBuilderOptionPickerState createState() {
@@ -107,7 +115,7 @@ _FormBuilderOptionPickerState createState() {
 }
 ```
 
-3. Phần giao diện hiển thị trước và sau khi click sẽ được quy định trong phương thức `defaultFileViewer` sẽ trả về `Widget`
+4. Phần giao diện hiển thị trước và sau khi click sẽ được quy định trong phương thức `defaultFileViewer` sẽ trả về `Widget`
 ```
 Widget defaultFileViewer(
   FormFieldState<List<SelectOption>?> field,
@@ -142,9 +150,12 @@ Widget defaultFileViewer(
 ```
 > Ở đây xảy ra các trường hợp. Nếu mà chưa có giá trị thì ta hiển thị tên(`label`) mặc định thể hiện là trường này chưa được chọn giá trị gì. Nếu mà giá trị đã được chọn thì ta hiện danh sách `name` của các lựa chọn này ra cho người dùng biết là đã lựa chọn nào(giá trị của `field` có thể nhiều như đã giải thích ở trên)
 
+<img src="assets/9.png" alt="9" width="400"/>
+<img src="assets/12.png" alt="12" width="400"/>
+
 > Nếu mà người dùng đã lựa chọn thì ta có thể thêm lựa chọn xóa nhanh tất cả các lựa chọn thông qua một `button` sau khi `click` ta có thể đặt lại giá trị cho trường này thông qua phương thức `didChange`
 
-4. Muốn lựa chọn được từ danh sách thì ý tưởng hiện tại là sau khi `click` vào `field` này thì sẽ gọi `onTap` để thực thi phương thức `pickOptions` của `state` để thực hiện xử lý phần lựa chọn này
+5. Muốn lựa chọn được từ danh sách thì ý tưởng hiện tại là sau khi `click` vào `field` này thì sẽ gọi `onTap` để thực thi phương thức `pickOptions` của `state` để thực hiện xử lý phần lựa chọn này
 
 > Đầu tiên là ta cần xây dựng một màn hình mới để hiện thị lên danh sách các lựa chọn và chức năng chọn. Sau đó là chỉ cần chờ đợi kết quả sau khi chuyển trang sang màn mới này
 ```
@@ -211,10 +222,12 @@ Tương tự xây dựng đến phần `usecase` ứng với mỗi `datasource`
 ```
 class FilterGetDataEvent extends FilterEvent {}
 class FilterSearchTermChangeEvent extends FilterEvent {}
+class FilterSelectOptionEvent extends FilterEvent {}
 ```
 
 - Lớp `FilterGetDataEvent` dùng để xác định xem cần lấy `datasource` nào
 - Lớp `FilterSearchTermChangeEvent` dùng để lưu lại giá trị trong thanh tìm kiếm để phục vụ cho phần `filter` các lựa chọn
+- Lớp `FilterSelectOptionEvent` dùng để cập nhật xem `SelectOption` nào được chọn và highlight lên giao diện thông qua thuộc tính `selected`
 
 > Khối `bloc`:
 ```
@@ -258,6 +271,17 @@ final filterData = state.data.where((element) =>
 - Việc cuối cùng là xác định phần giao diện cần hiển thị dựa vào các trạng thái 
 1. Đang lấy dữ liệu
 2. Dữ liệu lấy về từ `datasource` là rỗng
+
+<img src="assets/14.png" alt="14" width="400"/>
+
 3. Có lỗi xảy ra khi lấy dữ liệu
+
+<img src="assets/15.png" alt="15" width="400"/>
+
 4. Xác thực đầu vào của trường như nếu mà phụ thuộc vào trường khác thông qua thuộc tính `isRef` thì thông báo cần lựa chọn trường dữ liệu kia trước
+
+<img src="assets/16.png" alt="16" width="400"/>
+
 5. Có dữ liệu cần lựa chọn
+
+<img src="assets/10.png" alt="10" width="400"/>

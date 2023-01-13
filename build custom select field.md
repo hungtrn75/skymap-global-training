@@ -217,6 +217,26 @@ abstract class FilterService {
 
 VD trên là phần service với `datasource` là `state`
 
+```
+enum PickerType {
+  state, [territories/states]
+  town, [territories/towns?state_id=?]
+  zone, [territories/zones]
+  valley, [territories/valleys?zone_id=?]
+  farmUnit, [farm_units?per_page=all]
+  cotton, [lookup/cotton_choice?per_page=all]
+  cropType, [lookup/crop_type?per_page=all]
+  productType, [lookup/product_type?per_page=all]
+  plantingType, 
+  tsp, [tsps?per_page=all]
+  grower, [growers?per_page=all]
+  dealer, [dealers?per_page=all]
+  farmer, [farmers?per_page=all&dealer_id=?]
+  organization, [organizations]
+  chartZone,
+}
+```
+
 Tương tự xây dựng đến phần `usecase` ứng với mỗi `datasource`
 
 > Sau khi xây dựng được module `bloc` cho màn hình `FilterOptionPickerPage` thì việc cần làm lúc vào màn hình trong `lifecycle initState` ta chỉ việc gọi `event` để lấy dữ liệu

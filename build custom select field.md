@@ -227,13 +227,25 @@ enum PickerType {
   cotton, [lookup/cotton_choice?per_page=all]
   cropType, [lookup/crop_type?per_page=all]
   productType, [lookup/product_type?per_page=all]
-  plantingType, 
+  plantingType, [
+    SelectOption(id: "Dryland", name: "Dryland"),
+    SelectOption(id: "Irrigated", name: "Irrigated")
+  ]
   tsp, [tsps?per_page=all]
   grower, [growers?per_page=all]
   dealer, [dealers?per_page=all]
   farmer, [farmers?per_page=all&dealer_id=?]
   organization, [organizations]
-  chartZone,
+  chartZone, [
+    SelectOption(id: "zone", name: "Zone"),
+    SelectOption(id: "farm_unit", name: "Farm unit"),
+    SelectOption(id: "state", name: "State"),
+    SelectOption(id: "town", name: "Town"),
+    SelectOption(id: "valley", name: "Valley"),
+    SelectOption(id: "crop_type", name: "Crop Type"),
+    SelectOption(id: "product_type", name: "Product Type"),
+    SelectOption(id: "cotton_choice", name: "Cotton Choice"),
+  ]
 }
 ```
 
